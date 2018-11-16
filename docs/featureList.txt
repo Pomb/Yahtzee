@@ -1,0 +1,8 @@
+Yahtzee features.
+
+roll 5 d6
+hold any number dice up to 3 rolls before scoring
+score a chosen result choosing the dice scores against available scores.
+  once you've scored 3x1 you can't score 1 again in the round.
+
+Best score keeper

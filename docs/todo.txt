@@ -1,0 +1,3 @@
+implemenet all scoring rules
+
+save data best scores to json file with player name
