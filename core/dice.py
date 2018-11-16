@@ -50,12 +50,16 @@ class d6Set:
     def __repr__(self):
         result = ""
         for i in range(5):
+            if i == 0:
+                result += "  "
             if not self.hold[i]:
                 result += " ___ "
             else:
                 result += "     "
         result += "\n"
         for i in range(5):
+            if i == 0:
+                result += "  "
             if not self.hold[i]:
                 result += "| "
                 result += self.dice[i].__repr__()
@@ -66,10 +70,14 @@ class d6Set:
                 result += "  "
         result += "\n"
         for i in range(5):
+            if i == 0:
+                result += "  "
             if not self.hold[i]:
                 result += " ̅ ̅ ̅  "
             else:
                 result += "     "
+        result += "\n"
+        result += ("=" * 30)
         return result
 
     def getRollableDiceIndices(self):

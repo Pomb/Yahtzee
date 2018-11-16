@@ -11,7 +11,6 @@ __title__ = "Yahtzee"
 from core import Turn
 from core import TitleVisualizer
 from core.command import *
-from core.fsm import *
 from core.gameData import GameData
 import os
 import random
@@ -20,20 +19,7 @@ import collections
 class Game:
     def __init__(self):
         self.data = GameData()
-        self.stateMachine = StateMachine()
-
-        self.initMachine()
-        #self.gameLoop()
-
-    def initMachine(self):
-        #create game states
-        menuState = MenuState("Menu", self.stateMachine, player)
-        turnState = TurnState("Turn", self.stateMachine, player)
-        debriefState = DebriefState("Debrief", self.stateMachine, player)
-        #create valid transitions
-
-        #initialize the starting state
-        self.stateMachine.transition(menuState)
+        self.gameLoop()
 
     def gameLoop(self):
         os.system("cls")
@@ -59,8 +45,7 @@ class Game:
         print("Game Over!")
 
     def menu(self):
-        header = TitleVisualizer("Yahtzee Menu")
-        print(header)
+        print(TitleVisualizer("Yahtzee Menu"))
 
         actions = {
             "1" : NewGameCommand("New Game", self),
@@ -85,8 +70,7 @@ class Game:
 
     def debrief(self):
         os.system("cls")
-        endScreen = TitleVisualizer("Debrief")
-        endScreen.printTitle()
+        print(TitleVisualizer("Debrief"))
 
         self.data.roundEnabled = False
 
