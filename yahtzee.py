@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # ------------------------------------------------------------#
-# Simple Yahtzee game where you roll and hold dice to make    #
-# the scores against a score sheet                            #
+# Simple Yahtzee game where you roll and hold dice            #
+# to score rolls against a score sheet                        #
 # ------------------------------------------------------------#
 
 __author__ = "Paul Lombard"
@@ -23,6 +23,7 @@ class Game:
         self.gameLoop()
 
     def gameLoop(self):
+        os.system("Yahtzee Console Game")
         os.system("cls")
 
         while self.data.gameEnabled:
@@ -46,7 +47,7 @@ class Game:
         print("Game Over!")
 
     def menu(self):
-        print(TitleVisualizer("Yahtzee Menu"))
+        print(TitleVisualizer("Menu"))
 
         actions = {
             "1": cmd.NewGameCommand("New Game", self.data),

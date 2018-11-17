@@ -72,7 +72,8 @@ class d6Set:
             else:
                 result += "       "
         result += "\n"
-        result += str(self.rollCount).center(35, "=")
+        paddedRollCount = " " + str(self.rollCount) + " "
+        result += paddedRollCount.center(35, "─")
         return result
 
     def getRollableDiceIndices(self):
