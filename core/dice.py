@@ -1,7 +1,9 @@
 import random
 
+
 class d6:
     """A single instance of a d6 die"""
+
     def __init__(self):
         self.number = 0
 
@@ -10,35 +12,33 @@ class d6:
         return self.number
 
     def __repr__(self):
-        if self.number == 0:
+        if self.number is 0:
             return " "
         else:
             return str(self.number)
+
 
 class d6Set:
     def __init__(self):
         self.dice = []
         self.hold = []
+        self.numberOfDice = 5
+        self.rollCount = 0
 
-        for i in range(1,6):
+        for i in range(self.numberOfDice):
             self.dice.append(d6())
             self.hold.append(False)
 
     def roll(self):
-        for i in range(5):
-            if self.hold[i] == False:
+        for i in range(self.numberOfDice):
+            if self.hold[i] is False:
                 self.dice[i].roll()
+        self.rollCount += 1
 
     def total(self):
         total = 0
-        for i in range(len(self.dice)):
+        for i in range(self.numberOfDice):
             total += self.dice[i].number
-        return total
-
-    def totalForNumber(self, number):
-        for i in range(len(self.dice)):
-            if self.dice[i].number == number:
-                total += number
         return total
 
     def diceNumbers(self):
@@ -48,41 +48,36 @@ class d6Set:
         return numbers
 
     def __repr__(self):
+        """return dice layout string"""
         result = ""
         for i in range(5):
-            if i == 0:
-                result += "  "
             if not self.hold[i]:
-                result += " ___ "
+                result += "┌─────┐"
             else:
-                result += "     "
+                result += "       "
         result += "\n"
         for i in range(5):
-            if i == 0:
-                result += "  "
             if not self.hold[i]:
-                result += "| "
+                result += "│  "
                 result += self.dice[i].__repr__()
-                result += " |"
+                result += "  │"
             else:
-                result += "  "
+                result += "   "
                 result += self.dice[i].__repr__()
-                result += "  "
+                result += "   "
         result += "\n"
         for i in range(5):
-            if i == 0:
-                result += "  "
-            if not self.hold[i]:
-                result += " ̅ ̅ ̅  "
+            if self.hold[i] is False:
+                result += "└─────┘"
             else:
-                result += "     "
+                result += "       "
         result += "\n"
-        result += ("=" * 30)
+        result += str(self.rollCount).center(35, "=")
         return result
 
     def getRollableDiceIndices(self):
-        subset = []
-        for i in self.hold:
-            if self.hold[i] == False:
-                subset.append(i);
-        return subset
+        rollable = []
+        for i in range(len(self.hold)):
+            if self.hold[i] is False:
+                rollable.append(i)
+        return rollable

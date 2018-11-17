@@ -2,14 +2,16 @@ from .jsonSave import JsonSave
 from .titleVisualizer import TitleVisualizer
 import os
 
+
 class HighscoreBoard:
     def __init__(self):
         self.header = TitleVisualizer("Highscores")
         self.recordSize = 10
 
-    def printBoard(self):
+    def __repr__(self):
         os.system("cls")
-        print(self.header)
+        result = str(self.header)
+        result += "\n"
         data = JsonSave().load()
         scorelist = []
         namelist = []
@@ -23,7 +25,8 @@ class HighscoreBoard:
         best = bestsort[:self.recordSize]
 
         for lead, entry in enumerate(best):
-            left = '{:.<14}'.format(str(lead + 1) + "." + entry[0])
-            right = '{:.>14}'.format(entry[1])
-            print(left + right)
-        print("\n")
+            left = '{:.<17}'.format(str(lead + 1) + "." + entry[0])
+            right = '{:.>18}'.format(entry[1])
+            result += left + right
+            result += "\n"
+        return result

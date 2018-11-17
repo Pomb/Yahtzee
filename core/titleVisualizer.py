@@ -3,5 +3,5 @@ class TitleVisualizer:
         self.title = title
 
     def __repr__(self):
-        #return("    ---> {} <---".format(self.title))
-        return self.title.center(30, '=')
+        # return("    ---> {} <---".format(self.title))
+        return self.title.center(35, '=')

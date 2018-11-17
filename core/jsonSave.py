@@ -1,7 +1,7 @@
 #! /usr/bin/python
 import os
 import json
-import random
+
 
 class JsonSave:
     def __init__(self):
@@ -25,8 +25,5 @@ class JsonSave:
         else:
             data[player.name] = [totalScore]
 
-
         with open(self.savePath, 'w') as saveData:
             json.dump(data, saveData, sort_keys=True, indent=4)
-
-        #print("save complete")

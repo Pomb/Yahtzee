@@ -1,6 +1,7 @@
 #! /usr/bin/python
 from .scoreSheet import ScoreSheet
 
+
 class Player:
     def __init__(self, name):
         self.name = name

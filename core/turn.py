@@ -1,25 +1,27 @@
+from .command import command as cmd
+from .command import diceCommand as dcmd
 from .dice import d6Set
-from .command import *
 from .titleVisualizer import TitleVisualizer
 import os
-import inspect
+
 
 class Turn:
-    def __init__(self, player, game):
-        self.game = game
+    def __init__(self, gameData):
+        self.gameData = gameData
         self.header = TitleVisualizer("Rolling")
-        self.player = player
         self.diceSet = d6Set()
-        self.rollCount = 0
         self.maxRolls = 3
 
     def hasRolls(self):
-        hasRoll = self.rollCount <= self.maxRolls
+        hasRoll = self.diceSet.rollCount < self.maxRolls
         if hasRoll:
-            rollable = self.diceSet.getRollableDiceIndices()
-            if len(rollable) == 0:
-                hasRoll = False
+            return self.hasDiceToHold()
         return hasRoll
+
+    def hasDiceToHold(self):
+        rollable = self.diceSet.getRollableDiceIndices()
+        # print("rollable dice {}".format(rollable))
+        return len(rollable) > 0
 
     def play(self):
         os.system("cls")
@@ -27,16 +29,17 @@ class Turn:
         print(self.diceSet)
 
         actions = {}
-        hasrolls = self.hasRolls()
-        if hasrolls:
-            actions["r"] = RollCommand("Roll", self.diceSet)
-            if self.rollCount > 0:
-                actions["h"] = HoldAllCommand("Hold all", self.diceSet)
+        actions["r"] = dcmd.RollCommand("Roll", self.diceSet)
 
-                for i in range(len(self.diceSet.dice)):
-                    if self.diceSet.hold[i] == False:
-                        actions[str(i + 1)] = HoldCommand("Hold ", self.diceSet, i)
-        actions["q"] = EndRoundCommand("Quit Round", self.game)
+        # can only hold once the first roll has been made
+        if self.diceSet.rollCount > 0:
+            actions["h"] = dcmd.HoldAllCommand("Hold all", self.diceSet)
+            for i in range(len(self.diceSet.dice)):
+                if self.diceSet.hold[i] is False:
+                    actions[str(i + 1)] = dcmd.HoldCommand(
+                        "Hold ", self.diceSet, i)
+
+        actions["q"] = cmd.EndRoundCommand("Quit Round", self.gameData)
 
         actionPrompts = "\n"
         for key, value in actions.items():
@@ -47,25 +50,25 @@ class Turn:
         if actionChoice in actions:
             if actions[actionChoice].execute():
                 print(self.diceSet)
-                if isinstance(actions[actionChoice], HoldCommand):
-                    pass
-                else:
-                    self.rollCount = self.rollCount + 1
         else:
             print("\ninvalid prompt, try again")
 
-        if self.hasRolls() == False:
-            HoldAllCommand("Finished rolling ", self.diceSet).execute()
+        if self.hasRolls() is False:
+            # print("out of rolls")
+            # self.gameData.player.waitForAnyKey()
+            dcmd.HoldAllCommand("Finished rolling ", self.diceSet).execute()
 
     def chooseScore(self):
         os.system("cls")
-        print(self.player.scoreSheet.header)
+        print(self.gameData.player.scoreSheet.header)
         print(self.diceSet)
 
         actions = {}
-        for i, (key, value) in enumerate(self.player.scoreSheet.scores.items()):
+        for i, (key, value) in enumerate(
+                self.gameData.player.scoreSheet.scores.items()):
             if value < 0:
-                actions[str(i + 1)] = ScoreCommand(key, self.diceSet, self.player.scoreSheet, key)
+                actions[str(i + 1)] = dcmd.ScoreCommand(
+                    key, self.diceSet, self.gameData.player.scoreSheet, key)
 
         actionPrompts = "\n"
         for key, value in actions.items():

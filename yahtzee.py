@@ -10,11 +10,12 @@ __title__ = "Yahtzee"
 
 from core import Turn
 from core import TitleVisualizer
-from core.command import *
+from core.command import command as cmd
 from core.gameData import GameData
 import os
 import random
 import collections
+
 
 class Game:
     def __init__(self):
@@ -27,9 +28,9 @@ class Game:
         while self.data.gameEnabled:
             self.menu()
             if self.data.roundEnabled:
-                #player may choose to quit game from menu
+                # player may choose to quit game from menu
                 while self.data.player.scoreSheet.hasScoresToFill():
-                    turn = Turn(self.data.player, self)
+                    turn = Turn(self.data)
                     while(turn.hasRolls()):
                         turn.play()
                         if not self.data.roundEnabled:
@@ -48,14 +49,17 @@ class Game:
         print(TitleVisualizer("Yahtzee Menu"))
 
         actions = {
-            "1" : NewGameCommand("New Game", self),
-            "h" : HighscoreBoardCommand("Highscores"),
-            "q" : QuitCommand("Quit Game", self)
+            "1": cmd.NewGameCommand("New Game", self.data),
+            "2": cmd.HighscoreBoardCommand("Highscores"),
+            "3": cmd.HelpCommand("Help"),
+            "q": cmd.QuitCommand("Quit Game", self.data)
         }
 
         if self.data.player is not None:
-            actions["0"] = ContinueGameCommand("Continue As " + self.data.player.name, self)
-            actions["1"] = NewGameCommand("New Player Game", self)
+            actions["0"] = cmd.ContinueGameCommand(
+                "Continue As " + self.data.player.name, self.data)
+            actions["1"] = cmd.NewGameCommand(
+                "New Player Game", self.data)
 
         orderedActions = collections.OrderedDict(sorted(actions.items()))
 
@@ -75,10 +79,10 @@ class Game:
         self.data.roundEnabled = False
 
         if self.data.player is not None:
-            save = SaveCommand("Save", self.data.player)
+            save = cmd.SaveCommand("Save", self.data.player)
             save.execute()
 
-            #score = self.player.scoreSheet.total()
+            # score = self.player.scoreSheet.total()
             score = random.randint(40, 300)
             scoreStr = str(score).center(5, ' ')
             print(scoreStr.center(28, '#'))
@@ -86,6 +90,7 @@ class Game:
             self.data.player.newScoreSheet()
             self.data.player.waitForAnyKey()
         os.system("cls")
+
 
 if __name__ == "__main__":
     game = Game()

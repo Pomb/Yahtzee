@@ -1,9 +1,13 @@
 from .command import Command
 
+
 class DiceCommand(Command):
+    """Base command for dealing with the diceSet"""
+
     def __init__(self, title, diceSet):
         self.diceSet = diceSet
         self.title = title
+
 
 class RollCommand(DiceCommand):
     def __init__(self, title, diceSet):
@@ -13,18 +17,17 @@ class RollCommand(DiceCommand):
         self.diceSet.roll()
         return True
 
+
 class HoldCommand(DiceCommand):
     def __init__(self, title, diceSet, index):
         super().__init__(title, diceSet)
         self.index = index
 
     def execute(self):
-        if self.diceSet.hold[self.index] == True:
-            print("can't hold " + str(self.index))
-            return False
         self.diceSet.hold[self.index] = True
         print("holding dice index {} ".format(self.index))
         return True
+
 
 class HoldAllCommand(DiceCommand):
     def __init__(self, title, diceSet):
@@ -35,6 +38,7 @@ class HoldAllCommand(DiceCommand):
             self.diceSet.hold[i] = True
         print(self.title + " dice")
         return True
+
 
 class ScoreCommand(DiceCommand):
     def __init__(self, title, diceSet, scoreSheet, scoreKey):

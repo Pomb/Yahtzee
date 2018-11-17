@@ -2,14 +2,19 @@
 from ..jsonSave import JsonSave
 from ..player import Player
 from ..highscoreBoard import HighscoreBoard
+from ..help import Help
+
 
 class Command:
+    """Base command"""
+
     def __init__(self, title):
         self.title = title
 
     def execute(self):
-        """Return command execute success"""
+        """Return command execution success"""
         return True
+
 
 class SaveCommand(Command):
     def __init__(self, title, player):
@@ -17,52 +22,58 @@ class SaveCommand(Command):
         self.player = player
 
     def execute(self):
-        JsonSave().save(self.player);
+        JsonSave().save(self.player)
         return True
+
 
 class QuitCommand(Command):
-    def __init__(self, title, game):
+    def __init__(self, title, gameData):
         super().__init__(title)
-        self.game = game
+        self.gameData = gameData
 
     def execute(self):
-        self.game.data.gameEnabled = False
-        self.game.data.roundEnabled = False
+        self.gameData.gameEnabled = False
+        self.gameData.roundEnabled = False
         return True
+
 
 class EndRoundCommand(Command):
-    def __init__(self, title, game):
+    def __init__(self, title, gameData):
         super().__init__(title)
-        self.game = game
+        self.gameData = gameData
 
     def execute(self):
-        self.game.data.roundEnabled = False
+        self.gameData.roundEnabled = False
         return True
 
+
 class NewGameCommand(Command):
-    def __init__(self, title, game):
+    def __init__(self, title, gameData):
         super().__init__(title)
-        self.game = game
+        self.gameData = gameData
 
     def execute(self):
         name = input("Enter player name => ")
-        self.game.data.player = Player(name.upper())
-        self.game.data.roundEnabled = True
+        self.gameData.player = Player(name.upper())
+        self.gameData.roundEnabled = True
         return True
+
 
 class ContinueGameCommand(Command):
-    def __init__(self, title, game):
+    def __init__(self, title, gameData):
         super().__init__(title)
-        self.game = game
+        self.gameData = gameData
 
     def execute(self):
-        name = ""
-        if self.game.data.player is not None:
-            name = self.data.game.player.name
+        if self.gameData.player is not None:
+            return True
         else:
             raise ValueError("can't continue games without a player")
-        self.game.data.roundEnabled = True
+            return False
+
+        self.gameData.roundEnabled = True
         return True
+
 
 class HighscoreBoardCommand(Command):
     def __init__(self, title):
@@ -70,4 +81,14 @@ class HighscoreBoardCommand(Command):
         self.highscoreBoard = HighscoreBoard()
 
     def execute(self):
-        self.highscoreBoard.printBoard()
+        print(self.highscoreBoard)
+
+
+class HelpCommand(Command):
+    def __init__(self, title):
+        super().__init__(title)
+        self.help = Help()
+
+    def execute(self):
+        print(self.help)
+        input("\nany key to return to Menu")
