@@ -53,8 +53,7 @@ class NewGameCommand(Command):
         self.gameData = gameData
 
     def execute(self):
-        name = input("Enter player name => ")
-        self.gameData.player = Player(name.upper())
+        self.gameData.player = Player()
         self.gameData.roundEnabled = True
         return True
 

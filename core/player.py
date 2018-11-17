@@ -3,8 +3,8 @@ from .scoreSheet import ScoreSheet
 
 
 class Player:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self):
+        self.name = ""
         self.scoreSheet = ScoreSheet()
 
     def newScoreSheet(self):

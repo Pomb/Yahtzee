@@ -13,7 +13,6 @@ from core import TitleVisualizer
 from core.command import command as cmd
 from core.gameData import GameData
 import os
-import random
 import collections
 
 
@@ -57,12 +56,6 @@ class Game:
             "q": cmd.QuitCommand("Quit Game", self.data)
         }
 
-        if self.data.player is not None:
-            actions["0"] = cmd.ContinueGameCommand(
-                "Continue As " + self.data.player.name, self.data)
-            actions["1"] = cmd.NewGameCommand(
-                "New Player Game", self.data)
-
         orderedActions = collections.OrderedDict(sorted(actions.items()))
 
         actionPrompts = "\n"
@@ -78,19 +71,20 @@ class Game:
         self.clearScreen()
         print(TitleVisualizer("Debrief"))
 
+        score = self.data.player.scoreSheet.total()
+        scoreStr = "Total Score " + str(score).center(5, ' ')
+        print(TitleVisualizer(scoreStr, " ", boxed=False))
         self.data.roundEnabled = False
+
+        name = input("\nPlayer name => ")
+        self.data.player.name = name.upper()
 
         if self.data.player is not None:
             save = cmd.SaveCommand("Save", self.data.player)
             save.execute()
-
-            # score = self.player.scoreSheet.total()
-            score = random.randint(40, 300)
-            scoreStr = "Total Score " + str(score).center(5, ' ')
-            print(TitleVisualizer(scoreStr, " ", boxed=False))
-
             self.data.player.newScoreSheet()
             self.data.player.waitForAnyKey()
+
         self.clearScreen()
 
     def clearScreen(self):

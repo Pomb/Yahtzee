@@ -83,5 +83,24 @@ class ScoreSheet:
         for k, v in self.scores.items():
             if v < 0:
                 scoreSlots.append(k)
+            else:
+                name = self.strike(k.ljust(32, "."))
+                score = str(v).rjust(3, ".")
+                scoreSlots.append(name + score)
 
         return scoreSlots
+
+    def strike(self, text):
+        result = ""
+        for c in text:
+            result = result + c + '\u0336'
+        return result
+
+    def __repr__(self):
+        sheet = []
+        for k, v in self.scores.items():
+            name = k.ljust(32, ".")
+            score = str(v).rjust(3, ".")
+            sheet.append(name + score)
+
+        return sheet

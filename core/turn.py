@@ -33,13 +33,13 @@ class Turn:
 
         # can only hold once the first roll has been made
         if self.diceSet.rollCount > 0:
-            actions["h"] = dcmd.HoldAllCommand("Hold all", self.diceSet)
+            actions["h"] = dcmd.HoldAllCommand("Hold All", self.diceSet)
             for i in range(len(self.diceSet.dice)):
                 if self.diceSet.hold[i] is False:
                     actions[str(i + 1)] = dcmd.HoldCommand(
                         "Hold ", self.diceSet, i)
 
-        actions["s"] = cmd.AvaialbleSlotsCommand("Score slots", self.gameData)
+        actions["s"] = cmd.AvaialbleSlotsCommand("Score Slots", self.gameData)
         actions["q"] = cmd.EndRoundCommand("Quit Round", self.gameData)
 
         actionPrompts = "\n"
