@@ -65,9 +65,7 @@ class ContinueGameCommand(Command):
         self.gameData = gameData
 
     def execute(self):
-        if self.gameData.player is not None:
-            return True
-        else:
+        if self.gameData.player is None:
             raise ValueError("can't continue games without a player")
             return False
 
