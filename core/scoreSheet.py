@@ -77,3 +77,11 @@ class ScoreSheet:
     def addScore(self, key, amount):
         self.scores[key] = amount
         print("scored {} on {} ".format(amount, key))
+
+    def avaialbleScoreSlots(self):
+        scoreSlots = []
+        for k, v in self.scores.items():
+            if v < 0:
+                scoreSlots.append(k)
+
+        return scoreSlots

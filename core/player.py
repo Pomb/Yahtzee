@@ -11,4 +11,4 @@ class Player:
         self.scoreSheet = ScoreSheet()
 
     def waitForAnyKey(self):
-        input("any key to continue")
+        input("\nany key to continue")

@@ -39,6 +39,7 @@ class Turn:
                     actions[str(i + 1)] = dcmd.HoldCommand(
                         "Hold ", self.diceSet, i)
 
+        actions["s"] = cmd.AvaialbleSlotsCommand("Score slots", self.gameData)
         actions["q"] = cmd.EndRoundCommand("Quit Round", self.gameData)
 
         actionPrompts = "\n"

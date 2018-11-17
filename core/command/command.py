@@ -82,6 +82,7 @@ class HighscoreBoardCommand(Command):
 
     def execute(self):
         print(self.highscoreBoard)
+        input("\nany key to return to Menu")
 
 
 class HelpCommand(Command):
@@ -92,3 +93,15 @@ class HelpCommand(Command):
     def execute(self):
         print(self.help)
         input("\nany key to return to Menu")
+
+
+class AvaialbleSlotsCommand(Command):
+    def __init__(self, title, gameData):
+        super().__init__(title)
+        self.gameData = gameData
+
+    def execute(self):
+        avaialbleSlots = self.gameData.player.scoreSheet.avaialbleScoreSlots()
+        for i in range(len(avaialbleSlots)):
+            print(avaialbleSlots[i])
+        input("\nany key to return")

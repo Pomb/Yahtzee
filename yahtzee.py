@@ -24,7 +24,6 @@ class Game:
 
     def gameLoop(self):
         os.system("Yahtzee Console Game")
-        os.system("cls")
 
         while self.data.gameEnabled:
             self.menu()
@@ -45,8 +44,10 @@ class Game:
                     self.debrief()
 
         print("Game Over!")
+        self.clearScreen()
 
     def menu(self):
+        self.clearScreen()
         print(TitleVisualizer("Menu"))
 
         actions = {
@@ -74,7 +75,7 @@ class Game:
             actions[choice].execute()
 
     def debrief(self):
-        os.system("cls")
+        self.clearScreen()
         print(TitleVisualizer("Debrief"))
 
         self.data.roundEnabled = False
@@ -85,11 +86,14 @@ class Game:
 
             # score = self.player.scoreSheet.total()
             score = random.randint(40, 300)
-            scoreStr = str(score).center(5, ' ')
-            print(scoreStr.center(28, '#'))
+            scoreStr = "Total Score " + str(score).center(5, ' ')
+            print(TitleVisualizer(scoreStr, " ", boxed=False))
 
             self.data.player.newScoreSheet()
             self.data.player.waitForAnyKey()
+        self.clearScreen()
+
+    def clearScreen(self):
         os.system("cls")
 
 
