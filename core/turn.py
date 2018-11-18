@@ -31,7 +31,6 @@ class Turn:
 
     def hasDiceToHold(self):
         rollable = self.diceSet.getRollableDiceIndices()
-        # print("rollable dice {}".format(rollable))
         return len(rollable) > 0
 
     def play(self):
@@ -42,7 +41,6 @@ class Turn:
         actions = {}
         actions["r"] = dcmd.RollCommand("Roll", self.diceSet)
 
-        # can only hold once the first roll has been made
         if self.diceSet.rollCount > 0:
             actions["h"] = dcmd.HoldAllCommand("Hold All", self.diceSet)
             for i in range(len(self.diceSet.dice)):
@@ -73,8 +71,6 @@ class Turn:
                 print("\nInvalid input, try again")
 
         if self.hasRolls() is False:
-            # print("out of rolls")
-            # self.gameData.player.waitForAnyKey()
             dcmd.HoldAllCommand("Finished rolling ", self.diceSet).execute()
 
     def chooseScore(self):

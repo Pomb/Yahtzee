@@ -14,34 +14,29 @@ class ScoreRules:
         return oneCount
 
     def twos(self, diceSet):
-        """Twos - Score 2s multiplied by 2"""
+        """Twos - Score sum of all 2s"""
         counter = collections.Counter(diceSet.diceNumbers())
-        count = counter[2]
-        return count * 2
+        return sum(counter[2])
 
     def threes(self, diceSet):
-        """Threes - Score 3s multiplied by 3"""
+        """Threes - Score sum of all 3s"""
         counter = collections.Counter(diceSet.diceNumbers())
-        count = counter[3]
-        return count * 3
+        return sum(counter[3])
 
     def fours(self, diceSet):
-        """Fours - Score 4s multiplied by 4"""
+        """Fours - Score sum of all 4s"""
         counter = collections.Counter(diceSet.diceNumbers())
-        count = counter[4]
-        return count * 4
+        return sum(counter[4])
 
     def fives(self, diceSet):
-        """Fives - Score 5s multiplied by 5"""
+        """Fives - Score sum of all 5s"""
         counter = collections.Counter(diceSet.diceNumbers())
-        count = counter[5]
-        return count * 5
+        return sum(counter[5])
 
     def sixes(self, diceSet):
-        """Sixes - Score 6s multiplied by 6"""
+        """Sixes - Score sum of all 6s"""
         counter = collections.Counter(diceSet.diceNumbers())
-        count = counter[6]
-        return count * 6
+        return sum(counter[6])
 
     def threeOfAKind(self, diceSet):
         """Three Of A Kind - 3 of the same number. Score dice sum"""

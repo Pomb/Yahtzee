@@ -23,8 +23,6 @@ class Game:
         self.turn = Turn(self.data)
         self.debrief = Debrief(self.data)
 
-        self.gameLoop()
-
     def gameLoop(self):
         """The heart beat of the game.
         game loops on rounds and while the game is enabled"""
@@ -32,12 +30,10 @@ class Game:
         while self.data.gameEnabled:
             self.menu.enter()
             if self.data.roundEnabled:
-                # player may choose to quit game from menu
                 while self.data.player.scoreSheet.hasScoresToFill():
                     self.turn.enter()
                     if not self.data.roundEnabled:
                         break
-                    # self.data.player.waitForAnyKey()
 
                 if self.data.player.scoreSheet.complete():
                     self.debrief.enter()
@@ -50,4 +46,5 @@ class Game:
 
 
 if __name__ == "__main__":
-    Game()
+    game = Game()
+    game.gameLoop()

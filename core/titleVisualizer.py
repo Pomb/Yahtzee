@@ -4,13 +4,23 @@ class TitleVisualizer:
         self.fill = fill
         self.width = width
         self.boxed = boxed
+        self.NE = "┐"
+        self.NW = "┌"
+        self.SW = "└"
+        self.SE = "┘"
+        self.W = "│"
+        self.E = "│"
 
     def __repr__(self):
-        # return("    ---> {} <---".format(self.title))
         result = ""
         if self.boxed:
-            result = "┌" + (self.width - 2) * self.fill + "┐\n│"
+            result = self.NW + (self.width - 2) * self.fill
+            result += self.NE + "\n" + self.W
+
         result += self.title.center(self.width - 2, " ")
+
         if self.boxed:
-            result += "│\n└" + (self.width - 2) * self.fill + "┘"
+            result += self.E + "\n" + self.SW
+            result += (self.width - 2) * self.fill + self.SE
+
         return result

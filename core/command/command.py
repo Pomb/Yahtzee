@@ -4,6 +4,7 @@ from ..save import DatabaseSave
 from ..player import Player
 from ..highscoreBoard import HighscoreBoard
 from ..help import Help
+from ..exceptions import NoPlayerError
 
 
 class Command:
@@ -18,22 +19,15 @@ class Command:
 
 
 class SaveCommand(Command):
-    # Saves to a local json file and optionally to the local database
-    # with the idea later that it checks an internet connection and pushes
-    # database changes to a server of some kind.
-
-    def __init__(self, title, player, saveToDatabase=True):
+    def __init__(self, title, player, saveStrategy="json"):
         super().__init__(title)
+        self.stratgyTypes = {"json": JsonSave(), "database": DatabaseSave()}
         self.player = player
-        self.saveToDatabase = saveToDatabase
-        self.saveStrategy = JsonSave()
+        self.saveStrategy = saveStrategy
 
     def execute(self):
-        self.saveStrategy.save(self.player)
-
-        if self.saveToDatabase:
-            self.saveStrategy = DatabaseSave()
-            self.saveStrategy.save(self.player)
+        if self.saveStrategy in self.stratgyTypes:
+            self.stratgyTypes[self.saveStrategy].save(self.player)
         return True
 
 
@@ -76,7 +70,7 @@ class ContinueGameCommand(Command):
 
     def execute(self):
         if self.gameData.player is None:
-            raise ValueError("can't continue games without a player")
+            raise NoPlayerError("game requires a player")
             return False
 
         self.gameData.roundEnabled = True
@@ -91,6 +85,7 @@ class HighscoreBoardCommand(Command):
     def execute(self):
         print(self.highscoreBoard)
         input("\nany key to return to Menu")
+        return True
 
 
 class HelpCommand(Command):
@@ -101,6 +96,7 @@ class HelpCommand(Command):
     def execute(self):
         print(self.help)
         input("\nany key to return to Menu")
+        return True
 
 
 class AvaialbleSlotsCommand(Command):
@@ -113,6 +109,7 @@ class AvaialbleSlotsCommand(Command):
         for i in range(len(avaialbleSlots)):
             print(avaialbleSlots[i])
         input("\nany key to return")
+        return True
 
 
 class FillScoresRandomCommand(Command):
@@ -123,3 +120,4 @@ class FillScoresRandomCommand(Command):
     def execute(self):
         self.gameData.player.scoreSheet.fillAvailableWithRandomScores()
         self.gameData.roundEnabled = False
+        return True

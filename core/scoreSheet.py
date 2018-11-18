@@ -24,6 +24,8 @@ class ScoreSheet:
         self.scoreRules = ScoreRules()
 
     def total(self):
+        """returns the sum of all scores in the sheet"""
+
         totalScore = 0
         for k, v in self.scores.items():
             if self.scores[k] > 0:
@@ -35,6 +37,7 @@ class ScoreSheet:
         creates the command assosicated with the key
         and returns the total score of the diceSet
         """
+
         switch = {
             "ones": self.scoreRules.ones,
             "twos": self.scoreRules.twos,
@@ -73,6 +76,7 @@ class ScoreSheet:
         return True
 
     def canScore(self, key):
+        """True when there is a score slot still avaialble in the sheet"""
         return self.scores[key] == -1
 
     def addScore(self, key, amount):
@@ -104,10 +108,6 @@ class ScoreSheet:
     def strike(self, text):
         # Dosn't work in normal terminal but works in atom terminal
         return '\u0336'.join(text) + '\u0336'
-        # result = ""
-        # for c in text:
-        #     result = result + c + '\u0336'
-        # return result
 
     def __repr__(self):
         sheet = []

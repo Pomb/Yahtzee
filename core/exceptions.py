@@ -1,0 +1,2 @@
+class NoPlayerError(Exception):
+    pass
