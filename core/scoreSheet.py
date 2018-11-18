@@ -1,5 +1,6 @@
 from .titleVisualizer import TitleVisualizer
 from .scoreRules import ScoreRules
+import random
 
 
 class ScoreSheet:
@@ -24,8 +25,8 @@ class ScoreSheet:
 
     def total(self):
         totalScore = 0
-        if not self.hasScoresToFill():
-            for k, v in self.scores.items():
+        for k, v in self.scores.items():
+            if self.scores[k] > 0:
                 totalScore += v
         return totalScore
 
@@ -66,7 +67,7 @@ class ScoreSheet:
                 break
         return hasScoreSlots
 
-    def filled(self):
+    def complete(self):
         if self.hasScoresToFill():
             return False
         return True
@@ -78,23 +79,35 @@ class ScoreSheet:
         self.scores[key] = amount
         print("scored {} on {} ".format(amount, key))
 
+    def fillAvailableWithRandomScores(self):
+        for k, v in self.scores.items():
+            if self.scores[k] < 0:
+                # not a true score for the various score slots
+                self.addScore(k, random.randint(0, 30))
+
     def avaialbleScoreSlots(self):
         scoreSlots = []
         for k, v in self.scores.items():
             if v < 0:
                 scoreSlots.append(k)
             else:
-                name = self.strike(k.ljust(32, "."))
+                name = k.ljust(32, ".")
                 score = str(v).rjust(3, ".")
                 scoreSlots.append(name + score)
+
+        totalTitle = "Total".ljust(32, ".")
+        total = str(self.total()).rjust(3, ".")
+        scoreSlots.append(totalTitle + total)
 
         return scoreSlots
 
     def strike(self, text):
-        result = ""
-        for c in text:
-            result = result + c + '\u0336'
-        return result
+        # Dosn't work in normal terminal but works in atom terminal
+        return '\u0336'.join(text) + '\u0336'
+        # result = ""
+        # for c in text:
+        #     result = result + c + '\u0336'
+        # return result
 
     def __repr__(self):
         sheet = []
@@ -103,4 +116,7 @@ class ScoreSheet:
             score = str(v).rjust(3, ".")
             sheet.append(name + score)
 
+        totalTitle = "Total".ljust(32, ".")
+        total = str(self.total()).rjust(3, ".")
+        sheet.append(totalTitle + total)
         return sheet

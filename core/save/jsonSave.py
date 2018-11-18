@@ -1,12 +1,12 @@
 #! /usr/bin/python
 import os
 import json
+from .saveStrategy import SaveStrategy
 
 
-class JsonSave:
+class JsonSave(SaveStrategy):
     def __init__(self):
         self.savePath = "saves/save.json"
-        pass
 
     def load(self):
         with open(self.savePath) as saveData:

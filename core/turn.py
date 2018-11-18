@@ -9,8 +9,19 @@ class Turn:
     def __init__(self, gameData):
         self.gameData = gameData
         self.header = TitleVisualizer("Rolling")
-        self.diceSet = d6Set()
+        self.diceSet = None
         self.maxRolls = 3
+
+    def enter(self):
+        self.diceSet = d6Set()
+
+        while self.hasRolls():
+            if not self.gameData.roundEnabled:
+                break
+            self.play()
+
+        if self.gameData.roundEnabled:
+            self.chooseScore()
 
     def hasRolls(self):
         hasRoll = self.diceSet.rollCount < self.maxRolls
@@ -42,17 +53,24 @@ class Turn:
         actions["s"] = cmd.AvaialbleSlotsCommand("Score Slots", self.gameData)
         actions["q"] = cmd.EndRoundCommand("Quit Round", self.gameData)
 
+        if self.gameData.devmode:
+            actions["f"] = cmd.FillScoresRandomCommand(
+                "Fill With Random Scores", self.gameData)
+
         actionPrompts = "\n"
         for key, value in actions.items():
             actionPrompts += ("\t{} - {}\n".format(key, value.title))
 
-        actionChoice = input(actionPrompts)
+        validChoice = False
+        print(actionPrompts)
 
-        if actionChoice in actions:
-            if actions[actionChoice].execute():
+        while not validChoice:
+            actionChoice = input("Input=> ")
+            if actionChoice in actions:
+                validChoice = actions[actionChoice].execute()
                 print(self.diceSet)
-        else:
-            print("\ninvalid prompt, try again")
+            else:
+                print("\nInvalid input, try again")
 
         if self.hasRolls() is False:
             # print("out of rolls")
@@ -61,6 +79,9 @@ class Turn:
 
     def chooseScore(self):
         os.system("cls")
+        if not self.gameData.roundEnabled:
+            return
+
         print(self.gameData.player.scoreSheet.header)
         print(self.diceSet)
 
@@ -76,10 +97,13 @@ class Turn:
             actionPrompts += ("\t{} - {}\n".format(key, value.title))
 
         validChoice = False
+        print(actionPrompts)
 
         while not validChoice:
-            scoreChoice = input(actionPrompts)
+            scoreChoice = input("Input=> ")
             if scoreChoice in actions:
                 validChoice = actions[scoreChoice].execute()
             else:
-                print("Invaild command, please try again")
+                print("Invaild input, please try again")
+
+        self.gameData.player.waitForAnyKey()

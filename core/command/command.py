@@ -1,5 +1,6 @@
 #! /usr/bin/python
-from ..jsonSave import JsonSave
+from ..save import JsonSave
+from ..save import DatabaseSave
 from ..player import Player
 from ..highscoreBoard import HighscoreBoard
 from ..help import Help
@@ -17,12 +18,22 @@ class Command:
 
 
 class SaveCommand(Command):
-    def __init__(self, title, player):
+    # Saves to a local json file and optionally to the local database
+    # with the idea later that it checks an internet connection and pushes
+    # database changes to a server of some kind.
+
+    def __init__(self, title, player, saveToDatabase=False):
         super().__init__(title)
         self.player = player
+        self.saveToDatabase = saveToDatabase
+        self.saveStrategy = JsonSave()
 
     def execute(self):
-        JsonSave().save(self.player)
+        self.saveStrategy.save(self.player)
+
+        if self.saveToDatabase:
+            self.saveStrategy = DatabaseSave()
+            self.saveStrategy.execute(self.player)
         return True
 
 
@@ -102,3 +113,13 @@ class AvaialbleSlotsCommand(Command):
         for i in range(len(avaialbleSlots)):
             print(avaialbleSlots[i])
         input("\nany key to return")
+
+
+class FillScoresRandomCommand(Command):
+    def __init__(self, title, gameData):
+        super().__init__(title)
+        self.gameData = gameData
+
+    def execute(self):
+        self.gameData.player.scoreSheet.fillAvailableWithRandomScores()
+        self.gameData.roundEnabled = False
