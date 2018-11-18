@@ -1,3 +1,4 @@
-from .jsonSave import JsonSave
-from .saveStrategy import SaveStrategy
-from .databaseSave import DatabaseSave
+from .jsonSave import JsonSave  # noqa
+from .saveStrategy import SaveStrategy  # noqa
+from .databaseSave import DatabaseSave  # noqa
+import migrateSaves  # noqa

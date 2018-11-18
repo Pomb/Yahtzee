@@ -22,7 +22,7 @@ class SaveCommand(Command):
     # with the idea later that it checks an internet connection and pushes
     # database changes to a server of some kind.
 
-    def __init__(self, title, player, saveToDatabase=False):
+    def __init__(self, title, player, saveToDatabase=True):
         super().__init__(title)
         self.player = player
         self.saveToDatabase = saveToDatabase
@@ -33,7 +33,7 @@ class SaveCommand(Command):
 
         if self.saveToDatabase:
             self.saveStrategy = DatabaseSave()
-            self.saveStrategy.execute(self.player)
+            self.saveStrategy.save(self.player)
         return True
 
 
