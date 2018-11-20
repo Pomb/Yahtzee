@@ -1,6 +1,8 @@
 # Yahtzee
 A game of chance played from the comfort of the console.
 
+![altText](https://pmlomb.files.wordpress.com/2018/11/d6_yahtzee.png)
+
 ## Rules
 Score rules picked from https://en.wikipedia.org/wiki/Yahtzee, minus jokers.
 
